@@ -23,6 +23,7 @@ const Verify = () => {
 
     console.log("Sending to backend:", { success, orderId });
     try {
+      console.log("Verifying Payment...");
       const response = await axios.post(`${url}/api/v1/order/verify`, {
         success,
         orderId,
@@ -47,11 +48,12 @@ const Verify = () => {
   };
   useEffect(() => {
     verifyPayment();
-  }, [success, orderId]);
+  }, [success, orderId, url, navigate]);
 
   return (
     <div className="verify">
       <div className="spinner"></div>
+      <p>Verifying payment...</p>
     </div>
   );
 };

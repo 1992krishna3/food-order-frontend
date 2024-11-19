@@ -37,6 +37,7 @@ const LoginPopup = ({ setShowLogin }) => {
         headers: {
           "Content-Type": "application/json",
         },
+        withCredentials: true,
       });
 
       if (response.status === 201 || response.status === 200) {
