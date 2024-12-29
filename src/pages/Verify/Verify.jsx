@@ -5,7 +5,7 @@ import { StoreContext } from "../../context/StoreContext";
 import axios from "axios";
 
 const Verify = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const success = searchParams.get("success");
   const orderId = searchParams.get("orderId");
   const { url } = useContext(StoreContext);
@@ -14,24 +14,29 @@ const Verify = () => {
   console.log("Success:", success);
   console.log("Order ID:", orderId);
 
+  useEffect(() => {
   const verifyPayment = async () => {
     if (!success || !orderId) {
       console.error("Missing success or orderId parameters");
       navigate("/");
       return;
     }
+    
+    console.log("Sending GET request to:", `${url}/api/v1/order/verify`);
+    console.log("Query parameters:", { success, orderId });
 
-    console.log("Sending to backend:", { success, orderId });
+    
     try {
-      console.log("Verifying Payment...");
-      const response = await axios.post(`${url}/api/v1/order/verify`, {
-        success,
-        orderId,
+      console.log("Verifying payment...");
+      const response = await axios.get("https://food-order-backend-5.onrender.com/api/v1/order/verify", {
+        params:{success,orderId},
       });
+      console.log("API Response:", response.data);
+      
       if (response.data.success) {
         console.log(
-          "Payment verified and order recorded:",
-          response.data.order
+          "Payment verified:",
+          response.data.message
         );
         navigate("/myorders");
       } else {
@@ -46,7 +51,7 @@ const Verify = () => {
       navigate("/");
     }
   };
-  useEffect(() => {
+  
     verifyPayment();
   }, [success, orderId, url, navigate]);
 

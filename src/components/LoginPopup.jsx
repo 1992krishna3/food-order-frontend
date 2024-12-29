@@ -36,6 +36,7 @@ const LoginPopup = ({ setShowLogin }) => {
       const response = await axios.post(newUrl, data, {
         headers: {
           "Content-Type": "application/json",
+          
         },
         withCredentials: true,
       });
