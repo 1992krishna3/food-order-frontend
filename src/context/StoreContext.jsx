@@ -12,6 +12,8 @@ const StoreContextProvider = (props) => {
   console.log("Cart Items in StoreContext:", cartItems);
   console.log("Food List in StoreContext:", food_list);
 
+
+  
   useEffect(() => {
     const token = localStorage.getItem("token"); // Retrieve the token from localStorage
     if (token) {

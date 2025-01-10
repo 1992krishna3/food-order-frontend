@@ -2,10 +2,15 @@ import React, { useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { StoreContext } from "../context/StoreContext";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const LoginPopup = ({ setShowLogin }) => {
+const LoginPopup = ({ setShowLogin = () =>{} }) => {
+  if (typeof setShowLogin !== "function") {
+    console.error("setShowLogin is not a function");
+    return null; // Avoid rendering if the prop is invalid
+  }
   const { url, setToken } = useContext(StoreContext);
-
+  const navigate = useNavigate();
   const [currState, setCurrState] = useState("Login");
   const [data, setData] = useState({
     firstName: "",
@@ -40,12 +45,14 @@ const LoginPopup = ({ setShowLogin }) => {
         },
         withCredentials: true,
       });
-
+     
       if (response.status === 201 || response.status === 200) {
         const token = response.data.token;
+        console.log("Token received:", token); 
         setToken(token);
         localStorage.setItem("token", token);
         setShowLogin(false);
+        navigate("/profile"); // Redirect to profile page
       }
     } catch (error) {
       console.error(
@@ -58,6 +65,7 @@ const LoginPopup = ({ setShowLogin }) => {
     }
   };
 
+  
   return (
     <div className="fixed inset-0 grid  items-center justify-center  bg-opacity-20">
       <form onSubmit={onLogin} className="p-6 rounded-lg w-full max-w-md">
@@ -161,6 +169,7 @@ const LoginPopup = ({ setShowLogin }) => {
         )}
       </form>
     </div>
+   
   );
 };
 

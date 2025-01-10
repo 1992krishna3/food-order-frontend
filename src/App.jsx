@@ -11,6 +11,8 @@ import LoginPopup from "./components/LoginPopup";
 import { loadStripe } from "@stripe/stripe-js";
 import Verify from "./pages/Verify/Verify";
 import MyOrders from "./pages/MyOrders/MyOrders";
+import UserProfile from "./components/UserProfile";
+
 
 let stripePromise;
 const getStripe = () => {
@@ -37,13 +39,19 @@ const App = () => {
       {showLogin ? <LoginPopup setShowLogin={setShowLogin} /> : <></>}
       <div className="min-h-screen bg-gray-100">
         <Navbar setShowLogin={setShowLogin} />
+    
+
 
         <Routes>
           <Route path="/" element={<Home />} />
+          
+          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/login" element={<LoginPopup />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/order" element={<PlaceOrder />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="/myorders" element={<MyOrders />} />
+          
         </Routes>
       </div>
       <Footer />
