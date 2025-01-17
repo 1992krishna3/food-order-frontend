@@ -14,6 +14,7 @@ import MyOrders from "./pages/MyOrders/MyOrders";
 import UserProfile from "./components/UserProfile";
 
 
+
 let stripePromise;
 const getStripe = () => {
   if (!stripePromise) {
@@ -44,7 +45,7 @@ const App = () => {
 
         <Routes>
           <Route path="/" element={<Home />} />
-          
+          {/* <Route path="/update" element={<UserProfile/>} /> */}
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/login" element={<LoginPopup />} />
           <Route path="/cart" element={<Cart />} />

@@ -8,6 +8,7 @@ const UserProfile = () => {
   const [user, setUser] = useState(null); // Store user data
   const [formData, setFormData] = useState({}); // Form data for updates
   const [editMode, setEditMode] = useState(false);
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   // Fetch user profile
@@ -49,23 +50,36 @@ const UserProfile = () => {
       [name]: value,
     }));
   };
-
-  // Handle profile update
-  const handleUpdate = async (event) => {
-    event.preventDefault();
+  const handleUpdate = async () => {
+     // Prevent form submission default behavior
     try {
-      await axios.put(
-        `${url}/api/v1/users/profile`,
-        formData,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+      const token = localStorage.getItem('token'); // Ensure the token is stored
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      };
+      const data = {
+        firstName: 'Updated First Name',
+        lastName: 'Updated Last Name',
+        email: 'Updated Email',
+      };
+  
+      const response = await axios.put(
+        'https://food-order-backend-5.onrender.com/api/v1/users/profile',
+        data,
+        config
       );
-      setUser(formData); // Update user state with new data
-      setEditMode(false); // Exit edit mode
+     
+       console.log('Profile updated:', response.data);
+       setUser(response.data);
+       setEditMode(false);
+       setMessage("Profile updated successfully.");
+       
     } catch (error) {
-      console.error("Error updating profile:", error);
-      alert("Failed to update profile.");
+      console.error('Error updating profile:', error);
+      setMessage("Failed to update profile.");
     }
   };
 
@@ -77,6 +91,8 @@ const UserProfile = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">User Profile</h1>
       <div className="space-y-4">
+      {!editMode ? (
+        <div>
         <div>
           <label className="block font-semibold">First Name:</label>
           <p className="border p-2 rounded">{user.firstName}</p>
@@ -93,7 +109,7 @@ const UserProfile = () => {
           onClick={() => setEditMode(true)}
           className="bg-blue-500 text-white px-4 py-2 rounded"
         >
-          Edit Profile
+          Update User
         </button>
         <button
             onClick={logout}
@@ -102,7 +118,7 @@ const UserProfile = () => {
             Logout
           </button>
       </div>
-    {/* ) : (
+    ) : (
         <form onSubmit={handleUpdate} className="space-y-4">
           <div>
             <label className="block font-semibold">First Name:</label>
@@ -147,10 +163,17 @@ const UserProfile = () => {
             Cancel
           </button>
         </form>
-      ) */}
-
+      
+    )}
+    {/* <button
+      onClick={logout}
+      className="bg-red-500 text-white px-4 py-2 rounded ml-4"
+    >
+      Logout
+    </button> */}
+</div>
     </div>
   );
-};
+}
 
 export default UserProfile;
